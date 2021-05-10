@@ -1,0 +1,28 @@
+textarea {
+  min-height: 300px;
+  border: 2px solid #ffc107 !important;
+}
+
+body {
+  background-color: #555555;
+  color: #ffc107;
+}
+
+#t-b {
+  border-radius: 5px;
+  color: rgb(85, 85, 85);
+  padding: 1rem;
+  background-color: white;
+  border: 2px solid rgb(255, 193, 7);
+  padding: 1rem;
+}
+
+.mail {
+  color: rgb(85, 85, 85);
+  border: 1px solid #ffc107;
+  padding: 0.25rem;
+}
+
+input {
+  border: 2px solid #ffc107 !important;
+}
