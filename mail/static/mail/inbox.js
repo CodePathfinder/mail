@@ -3,18 +3,18 @@ var subject = '';
 var textbody = '';
 var bool = false;
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
 
 	// Use buttons to toggle between views
 	document.querySelector('#inbox').addEventListener('click', () => load_mailbox('inbox'));
 	document.querySelector('#sent').addEventListener('click', () => load_mailbox('sent'));
 	document.querySelector('#archived').addEventListener('click', () => load_mailbox('archive'));
 	document.querySelector('#compose').addEventListener('click', () => compose_email(false));
-	
+
 	// By default, load the inbox
 	load_mailbox('inbox');
 });
-  
+
 function compose_email(bool) {
 
 	// Show compose view and hide other views
@@ -28,8 +28,8 @@ function compose_email(bool) {
 		subject = '';
 		textbody = '';
 	}
-		
-	// Clear out composition fields if bool is false or pre-fill the fields with recipient, subjectis, and textbody strings if bool is true (see lines 140-145 below)
+
+	// Clear out composition fields if bool is false or pre-fill the fields with recipient, subject, and textbody strings if bool is true (see lines 142-148 below)
 	document.querySelector('#compose-recipients').value = recipient;
 	document.querySelector('#compose-subject').value = subject;
 	document.querySelector('#compose-body').value = textbody;
@@ -44,13 +44,13 @@ function compose_email(bool) {
 				body: document.querySelector('#compose-body').value
 			})
 		})
-		.then(response => response.json())
-		.then(result => {
-			// Print result of POST request
-			console.log(result);
-			load_mailbox('sent');
-		})
-		.catch(error => console.log(error));
+			.then(response => response.json())
+			.then(result => {
+				// Print result of POST request
+				console.log(result);
+				load_mailbox('sent');
+			})
+			.catch(error => console.log(error));
 		return false;
 	}
 }
@@ -65,19 +65,19 @@ function load_mailbox(mailbox) {
 
 	// Show the mailbox name
 	document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
-	
+
 	// Clear the container block
 	document.querySelector('#container').innerHTML = '';
-	
+
 	// Request to server for the list of email in a mailbox
 	fetch(`/emails/${mailbox}`)
-	.then(response => response.json())
-	.then(emails => {
-		// Print emails
-		console.log(emails);
-		emails.forEach(email => show_email(email));
-	})
-	.catch(error => console.log(error));
+		.then(response => response.json())
+		.then(emails => {
+			// Print emails
+			console.log(emails);
+			emails.forEach(email => show_email(email));
+		})
+		.catch(error => console.log(error));
 }
 
 // Add an email with given content to mailbox section (#emails-view)
@@ -92,10 +92,10 @@ function show_email(email) {
 		if (mbox === 'Inbox') {
 			read_status(email);
 		}
-		get_email(email, mbox);		
+		get_email(email, mbox);
 	};
 	document.querySelector('#container').append(element);
-}	
+}
 
 function get_email(email, mbox) {
 	// Show the email and hide other views
@@ -109,29 +109,29 @@ function get_email(email, mbox) {
 	email_view.innerHTML = '';
 
 	// Disclaimer: function fetch(`/emails/${email['id']}`) was not added as all the required information about each email in the given mailbox have been already received from the server). According to the specification, users shall be allowed to get access to a specific email from the respective mailbox (by click on email). Thus, separate GET request to `/emails/<int:email_id>}` would not be required, unless users would be allowed to reach this endpoint immediately through the URL (this option, however, wasn't mentioned in the specification).
-	
+
 	// Show email header, buttons and content
 	const header = document.createElement('div');
 	// header.className = 'emails';
 	header.innerHTML = `<b>From:</b> ${email['sender']} <br> <b>To:</b> ${email['recipients']} <br> <b>Subject:</b> ${email['subject']} <br> <b>Timestamp:</b> ${email['timestamp']} <br>`;
 	email_view.append(header);
-	const btn_reply = document.createElement('button');		
+	const btn_reply = document.createElement('button');
 	btn_reply.className = 'btn btn-sm btn-outline-warning mt-2';
 	btn_reply.id = 'reply';
 	btn_reply.innerHTML = 'Reply';
 	email_view.append(btn_reply);
 
 	if (mbox === "Inbox" || mbox === "Archive") {
-		const btn_archive = document.createElement('button');		
+		const btn_archive = document.createElement('button');
 		btn_archive.className = 'btn btn-sm btn-outline-warning mt-2 mx-2';
 		btn_archive.id = "arch";
-		email['archived'] === false ? btn_archive.innerHTML = 'Archive' : btn_archive.innerHTML = 'Unarchive';		
+		email['archived'] === false ? btn_archive.innerHTML = 'Archive' : btn_archive.innerHTML = 'Unarchive';
 		email_view.append(btn_archive);
 		document.querySelector('#arch').onclick = () => {
-		 	archived_status(email);
+			archived_status(email);
 		};
 	}
-	
+
 	const hr = document.createElement('hr');
 	email_view.append(hr);
 	const text_body = document.createElement('div');
@@ -158,8 +158,8 @@ function archived_status(email) {
 			archived: archived_flag
 		})
 	})
-	.then(() => load_mailbox('inbox'))
-	.catch(error => console.log(error));
+		.then(() => load_mailbox('inbox'))
+		.catch(error => console.log(error));
 }
 
 // Change read flag for inbox email when it is clicked
@@ -172,7 +172,7 @@ function read_status(email) {
 			read: read_flag
 		})
 	})
-	.catch(error => console.log(error));
+		.catch(error => console.log(error));
 }
-	
+
 
